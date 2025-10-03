@@ -15,7 +15,7 @@
 
 ### 安装
 1. 通过Package Manager添加Git URL:
-https://github.com/yourusername/com.zhangjm.ui-animation-kit.git
+https://github.com/PeterParkers007/com.zhangjm.ui-animation-kit.git
 
 
 ### 基础用法
