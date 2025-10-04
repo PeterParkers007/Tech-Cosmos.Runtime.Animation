@@ -1,0 +1,21 @@
+{
+    "name": "ZJM.UIAnimationTool.Runtime",
+    "references": [
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.textmeshpro",
+            "expression": "2.1.0",
+            "define": "TMP_PRESENT"
+        }
+    ],
+    "noEngineReferences": false
+}
