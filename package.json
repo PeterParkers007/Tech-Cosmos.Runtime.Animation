@@ -2,32 +2,5 @@
   "name": "com.zhangjm.ui-animation-kit",
   "displayName": "ZJM UI Animation Kit",
   "version": "1.0.0",
-  "description": "Professional UI animation system with smooth lerp effects, supporting Image, Text and TextMeshPro components. Perfect for creating engaging user interfaces.",
-  "unity": "2022.3",
-  "author": {
-    "name": "张锦铭",
-    "email": "3427463164@qq.com",
-    "url": "https://github.com/PeterParkers007"
-  },
-  "keywords": [
-    "ui",
-    "animation", 
-    "lerp",
-    "tween",
-    "effects",
-    "interaction",
-    "textmeshpro"
-  ],
-  "samples": [
-    {
-      "displayName": "Basic Examples",
-      "description": "Basic usage examples with common UI animations",
-      "path": "Samples~/Basic Examples"
-    },
-    {
-      "displayName": "Advanced Effects", 
-      "description": "Advanced animation combinations and effects",
-      "path": "Samples~/Advanced Effects"
-    }
-  ]
+  "description": "UI Animation System"
 }
