@@ -7,7 +7,7 @@ namespace ZJM_UI_EffectLerpTool.UIAnimationTool.Utilities
     {
         public static void ValueLerp<T, U>(U obj, T targetValue, float lerpSpeed, bool useUnscaledTime, MonoBehaviour monoBehaviour, AnimationCurve curve = null, System.Action<T> onUpdate = null)
         {
-            // ∫À–ƒ–ﬁ∏ƒ£∫≤ª‘Ÿ–¬Ω®CoroutineManager£¨∏ƒ”√µ•¿˝Instance
+            // Ê†∏ÂøÉ‰øÆÊîπÔºö‰∏çÂÜçÊñ∞Âª∫CoroutineManagerÔºåÊîπÁî®Âçï‰æãInstance
             AnimationManager manager = AnimationManager.Instance;
 
             if (obj is GameObject gameObject && targetValue is Vector3 vector3Target)
@@ -20,6 +20,17 @@ namespace ZJM_UI_EffectLerpTool.UIAnimationTool.Utilities
                 else
                 {
                     manager.StartNewCoroutine(monoBehaviour, PosLerpCoroutine(transform, vector3Target, lerpSpeed, useUnscaledTime, curve));
+                }
+            }
+            else if (obj is Vector3 startVec3 && targetValue is Vector3 targetVec3)
+            {
+                if (curve == null)
+                {
+                    manager.StartNewCoroutine(monoBehaviour, Vector3LerpCoroutine(startVec3, targetVec3, lerpSpeed, useUnscaledTime, onUpdate as System.Action<Vector3>));
+                }
+                else
+                {
+                    manager.StartNewCoroutine(monoBehaviour, Vector3LerpCoroutine(startVec3, targetVec3, lerpSpeed, useUnscaledTime, onUpdate as System.Action<Vector3>, curve));
                 }
             }
             else if (obj is RectTransform rectTransform && targetValue is Vector2 vector2Target)
@@ -87,7 +98,20 @@ namespace ZJM_UI_EffectLerpTool.UIAnimationTool.Utilities
 
             transform.position = targetValue;
         }
+        public static IEnumerator Vector3LerpCoroutine(Vector3 startValue, Vector3 targetValue, float lerpSpeed, bool useUnscaledTime, System.Action<Vector3> onUpdate, AnimationCurve curve = null)
+        {
+            float elapsedTime = 0;
+            while (elapsedTime < 1)
+            {
+                float t = curve != null ? curve.Evaluate(elapsedTime) : elapsedTime;
+                Vector3 currentValue = Vector3.Lerp(startValue, targetValue, t);
+                onUpdate?.Invoke(currentValue); // ÂõûË∞É‰º†ÈÄíVector3ÔºåÁõ¥Êé•‰øÆÊîπÁº©Êîæ
 
+                elapsedTime += (useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime) * lerpSpeed;
+                yield return null;
+            }
+            onUpdate?.Invoke(targetValue); // Á°Æ‰øùÊúÄÁªàÂÄºÂáÜÁ°Æ
+        }
         public static IEnumerator RotationLerpCoroutine(Transform transform, Quaternion targetValue, float lerpSpeed, bool useUnscaledTime, AnimationCurve curve = null)
         {
             float elapsedTime = 0;
@@ -136,7 +160,6 @@ namespace ZJM_UI_EffectLerpTool.UIAnimationTool.Utilities
             }
             onUpdate?.Invoke(targetColor);
         }
-
         public static IEnumerator ValueLerpCoroutine(float startValue, float endValue, float lerpSpeed, bool useUnscaledTime, System.Action<float> onUpdate, AnimationCurve curve = null)
         {
             float elapsedTime = 0;
