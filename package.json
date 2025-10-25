@@ -1,14 +1,14 @@
 {
-    "name": "com.zhangjm.ui-animation-kit",
-    "displayName": "ZJM UI Animation Kit",
+    "name": "com.tech-cosmos.animation-kit",
+    "displayName": "Animation Kit",
     "version": "1.0.0",
     "description": "Professional UI animation system with smooth lerp effects, supporting Image, Text and TextMeshPro",
     "unity": "2022.3",
     "author": {
-        "name": "张锦铭",
-        "email": "3427463164@qq.com",
-        "url": "https://github.com/PeterParkers007"
-    },
+    "name": "Tech-Cosmos",
+    "email": "3427463164@qq.com",
+    "url": "https://github.com/PeterParkers007/Tech-Cosmos.Infra.LoggingSystem.git"
+  },
     "keywords": [
         "ui",
         "animation",
