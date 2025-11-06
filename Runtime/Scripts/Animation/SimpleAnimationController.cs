@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using ZJM_UI_EffectLerpTool.UIAnimationTool.Animation.Data;
 using ZJM_UI_EffectLerpTool.UIAnimationTool.Utilities;
+
 namespace ZJM_UI_EffectLerpTool.UIAnimationTool.Animation
 {
     public class SimpleAnimationController : MonoBehaviour
@@ -17,136 +18,99 @@ namespace ZJM_UI_EffectLerpTool.UIAnimationTool.Animation
         public bool isUseUnScaledTime;
         public AudioClip playClip;
         public AudioClip quitClip;
+
         private Image image;
         private AudioSource audioSource;
         private Vector2 startPos;
         private Vector2 startScale;
         private Color startColor;
         private Quaternion startRotation;
+
         private void Start()
         {
-            audioSource = GetComponent<AudioSource>();
-            if (audioSource == null)
-            {
-                gameObject.AddComponent<AudioSource>();
-            }
+            audioSource = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
             image = GetComponent<Image>();
+
             startPos = image.rectTransform.localPosition;
             startScale = image.rectTransform.localScale;
             startColor = image.color;
             startRotation = image.rectTransform.localRotation;
         }
-        private void PlayTargetAnimation(AnimationPreset lerpAction)
+
+        private void PlayAnimation(AnimationPreset lerpAction, bool isPlayAnimation)
         {
+            var rectTransform = image.rectTransform;
+
             switch (lerpAction.prop)
             {
                 case AnimationPreset.LerpProperty.Position:
-                    AnimationLerper.ValueLerp(image.rectTransform, lerpAction.targetPos, changeSpeed, isUseUnScaledTime, this, lerpCurve);
+                    Vector2 targetPos = isPlayAnimation ? lerpAction.targetPos : startPos;
+                    AnimationLerper.ValueLerp(rectTransform, targetPos, changeSpeed, isUseUnScaledTime, this,"Position" ,lerpCurve);
                     break;
+
                 case AnimationPreset.LerpProperty.Color:
-                    AnimationLerper.ValueLerp(image.color, lerpAction.targetColor, changeSpeed, isUseUnScaledTime, this, lerpCurve, (color) =>
-                    {
-                        image.color = color;
-                    });
+                    Color targetColor = isPlayAnimation ? lerpAction.targetColor : startColor;
+                    AnimationLerper.ValueLerp(image.color, targetColor, changeSpeed, isUseUnScaledTime, this,"Color" ,lerpCurve,
+                        (color) => image.color = color);
                     break;
+
                 case AnimationPreset.LerpProperty.Scale:
-                    AnimationLerper.ValueLerp(image.rectTransform.localScale.x, startScale.x + lerpAction.targetScale.x, changeSpeed, isUseUnScaledTime, this, lerpCurve, (value) =>
-                    {
-                        Vector2 localScale = image.rectTransform.localScale;
-                        localScale.x = value;
-                        image.rectTransform.localScale = localScale;
-                    });
-                    AnimationLerper.ValueLerp(image.rectTransform.localScale.y, startScale.y + lerpAction.targetScale.y, changeSpeed, isUseUnScaledTime, this, lerpCurve, (value) =>
-                    {
-                        Vector2 localScale = image.rectTransform.localScale;
-                        localScale.y = value;
-                        image.rectTransform.localScale = localScale;
-                    });
+                    Vector2 targetScale = isPlayAnimation ?
+                        new Vector2(startScale.x + lerpAction.targetScale.x, startScale.y + lerpAction.targetScale.y) :
+                        startScale;
+
+                    AnimationLerper.ValueLerp(rectTransform.localScale, targetScale, changeSpeed, isUseUnScaledTime, this,"Scale" ,lerpCurve,
+                        (scale) => rectTransform.localScale = scale);
                     break;
+
                 case AnimationPreset.LerpProperty.Rotate:
-                    switch (lerpAction.rotateWay)
-                    {
-                        case AnimationPreset.RotateWay.z:
-                            AnimationLerper.ValueLerp(image.rectTransform, Quaternion.Euler(0, 0, lerpAction.targetAngle), changeSpeed, isUseUnScaledTime, this, lerpCurve);
-                            break;
-                        case AnimationPreset.RotateWay.x:
-                            AnimationLerper.ValueLerp(image.rectTransform, Quaternion.Euler(lerpAction.targetAngle, 0, 0), changeSpeed, isUseUnScaledTime, this, lerpCurve);
-                            break;
-                        case AnimationPreset.RotateWay.y:
-                            AnimationLerper.ValueLerp(image.rectTransform, Quaternion.Euler(0, lerpAction.targetAngle, 0), changeSpeed, isUseUnScaledTime, this, lerpCurve);
-                            break;
-                    }
+                    Quaternion targetRotation = isPlayAnimation ?
+                        GetTargetRotation(lerpAction) :
+                        startRotation;
+
+                    AnimationLerper.ValueLerp(rectTransform, targetRotation, changeSpeed, isUseUnScaledTime, this,"Rotate" ,lerpCurve);
                     break;
             }
         }
-        private void PlayQuitAnimation(AnimationPreset lerpAction)
+
+        private Quaternion GetTargetRotation(AnimationPreset lerpAction)
         {
-            switch (lerpAction.prop)
+            return lerpAction.rotateWay switch
             {
-                case AnimationPreset.LerpProperty.Position:
-                    AnimationLerper.ValueLerp(image.rectTransform, startPos, changeSpeed, isUseUnScaledTime, this, lerpCurve);
-                    break;
-                case AnimationPreset.LerpProperty.Color:
-                    AnimationLerper.ValueLerp(image.color, startColor, changeSpeed, isUseUnScaledTime, this, lerpCurve, (color) =>
-                    {
-                        image.color = color;
-                    });
-                    break;
-                case AnimationPreset.LerpProperty.Scale:
-                    AnimationLerper.ValueLerp(image.rectTransform.localScale.x, startScale.x, changeSpeed, isUseUnScaledTime, this, lerpCurve, (value) =>
-                    {
-                        Vector2 localScale = image.rectTransform.localScale;
-                        localScale.x = value;
-                        image.rectTransform.localScale = localScale;
-                    });
-                    AnimationLerper.ValueLerp(image.rectTransform.localScale.y, startScale.y, changeSpeed, isUseUnScaledTime, this, lerpCurve, (value) =>
-                    {
-                        Vector2 localScale = image.rectTransform.localScale;
-                        localScale.y = value;
-                        image.rectTransform.localScale = localScale;
-                    });
-                    break;
-                case AnimationPreset.LerpProperty.Rotate:
-                    switch (lerpAction.rotateWay)
-                    {
-                        case AnimationPreset.RotateWay.x:
-                            AnimationLerper.ValueLerp(image.rectTransform, Quaternion.Euler(startRotation.x, 0, 0), changeSpeed, isUseUnScaledTime, this, lerpCurve);
-                            break;
-                        case AnimationPreset.RotateWay.y:
-                            AnimationLerper.ValueLerp(image.rectTransform, Quaternion.Euler(0, startRotation.y, 0), changeSpeed, isUseUnScaledTime, this, lerpCurve);
-                            break;
-                        case AnimationPreset.RotateWay.z:
-                            AnimationLerper.ValueLerp(image.rectTransform, Quaternion.Euler(0, 0, startRotation.z), changeSpeed, isUseUnScaledTime, this, lerpCurve);
-                            break;
-                    }
-                    break;
-            }
+                AnimationPreset.RotateWay.x => Quaternion.Euler(lerpAction.targetAngle, 0, 0),
+                AnimationPreset.RotateWay.y => Quaternion.Euler(0, lerpAction.targetAngle, 0),
+                AnimationPreset.RotateWay.z => Quaternion.Euler(0, 0, lerpAction.targetAngle),
+                _ => Quaternion.identity
+            };
         }
+
         public void Play()
         {
-            for (int i = 0; i < lerpWays.Count; i++)
-            {
-                PlayTargetAnimation(lerpWays[i]);
-            }
-            if (playClip != null)
-            {
-                audioSource.clip = playClip;
-                audioSource.Play();
-            }
+            ExecuteAnimations(true);
+            PlayAudio(playClip);
         }
+
         public void Quit()
         {
-            for (int i = 0; i < lerpWays.Count; i++)
+            ExecuteAnimations(false);
+            PlayAudio(quitClip);
+        }
+
+        private void ExecuteAnimations(bool isPlay)
+        {
+            foreach (var preset in lerpWays)
             {
-                PlayQuitAnimation(lerpWays[i]);
+                PlayAnimation(preset, isPlay);
             }
-            if (quitClip != null)
+        }
+
+        private void PlayAudio(AudioClip clip)
+        {
+            if (clip != null)
             {
-                audioSource.clip = quitClip;
+                audioSource.clip = clip;
                 audioSource.Play();
             }
-
         }
     }
 }
-
