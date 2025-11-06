@@ -324,7 +324,7 @@ namespace ZJM_UI_EffectLerpTool.UIAnimationTool.Animation
         #endregion
 
         #region 工具方法
-        private void LerpScale(RectTransform rectTransform, Vector2 targetScale)
+        private void LerpScale(RectTransform rectTransform, Vector3 targetScale)
         {
             AnimationLerper.ValueLerp(rectTransform.localScale,targetScale,changeSpeed,isUseUnScaledTime,this,"LerpScaleCoroutine",animationCurve);
         }
