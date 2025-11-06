@@ -8,7 +8,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using ZJM_UI_EffectLerpTool.UIAnimationTool.Animation.Data;
 using ZJM_UI_EffectLerpTool.UIAnimationTool.Utilities;
-using System.Numerics;
 
 [assembly: AssemblyTitle("Peter's UI Animation Lerp Tool")]
 [assembly: AssemblyDescription("高级UI动画系统 - 按钮支持TextMeshPro和原生Text组件")]
