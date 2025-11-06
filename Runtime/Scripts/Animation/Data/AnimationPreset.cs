@@ -27,7 +27,7 @@ namespace ZJM_UI_EffectLerpTool.UIAnimationTool.Animation.Data
 
         public Vector2 targetPos;
         public Color targetColor;
-        public Vector2 targetScale;
+        public Vector3 targetScale;
         public float targetAngle;
     }
 }

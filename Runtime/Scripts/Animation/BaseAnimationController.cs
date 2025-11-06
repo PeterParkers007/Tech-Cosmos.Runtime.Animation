@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using ZJM_UI_EffectLerpTool.UIAnimationTool.Animation.Data;
 using ZJM_UI_EffectLerpTool.UIAnimationTool.Utilities;
+using System.Numerics;
 
 [assembly: AssemblyTitle("Peter's UI Animation Lerp Tool")]
 [assembly: AssemblyDescription("高级UI动画系统 - 按钮支持TextMeshPro和原生Text组件")]
@@ -50,8 +51,8 @@ namespace ZJM_UI_EffectLerpTool.UIAnimationTool.Animation
         private float buttonStartAngle;
         private float textStartAngle;
         private Vector2 buttonStartPos;
-        private Vector2 buttonStartSize;
-        private Vector2 textStartSize;
+        private Vector3 buttonStartSize;
+        private Vector3 textStartSize;
         private Vector2 textStartPos;
 
         void Start()
@@ -326,7 +327,11 @@ namespace ZJM_UI_EffectLerpTool.UIAnimationTool.Animation
         #region 工具方法
         private void LerpScale(RectTransform rectTransform, Vector3 targetScale)
         {
-            AnimationLerper.ValueLerp(rectTransform.localScale,targetScale,changeSpeed,isUseUnScaledTime,this,"LerpScaleCoroutine",animationCurve);
+            AnimationLerper.ValueLerp(rectTransform.localScale, targetScale, changeSpeed, isUseUnScaledTime, this,
+            $"LerpScale_{rectTransform.GetInstanceID()}", animationCurve,
+            (scale) => {
+                rectTransform.localScale = scale;
+            });
         }
 
         private void LerpRotation(RectTransform rectTransform, AnimationConfig.RotateXYZ rotateWay, float angle)

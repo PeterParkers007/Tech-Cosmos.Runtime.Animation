@@ -37,8 +37,8 @@ namespace ZJM_UI_EffectLerpTool.UIAnimationTool.Animation.Data
         public Color enterColor;
         public Color exitColor;
         public Color pressColor;
-        public Vector2 enterScale;
-        public Vector2 pressScale;
+        public Vector3 enterScale;
+        public Vector3 pressScale;
         public float enterAngle;
         public float pressAngle;
     }
